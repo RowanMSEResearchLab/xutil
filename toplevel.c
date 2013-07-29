@@ -1,6 +1,8 @@
 #include "xutil.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-int main (int argc, char *argv[])
+void main (int argc, char *argv[])
 {
 	int i;
 	// numTopLevel = 0;

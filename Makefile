@@ -1,5 +1,5 @@
 
-all: windowtree toplevel
+all: windowtree toplevel mouseloc
 
 
 windowtree: xutil.o windowtree.o
@@ -13,6 +13,13 @@ windowtree.o: xutil.h windowtree.c
 
 toplevel: xutil.o toplevel.o
 	gcc -g -o $@ xutil.o toplevel.o -lxcb -lglib-2.0
+
+mouseloc: xutil.o mouseloc.o
+	gcc -g -o $@ xutil.o mouseloc.o -lxcb -lglib-2.0
+
+mouseloc.o: xutil.h mouseloc.c
+	gcc -c -g `pkg-config --cflags glib-2.0` mouseloc.c 
+
 
 
 clean:

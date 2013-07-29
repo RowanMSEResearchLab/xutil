@@ -35,7 +35,7 @@ void init_xcb ( ) {
 	display = xcb_connect ( NULL, &screen_number);
 	if (xcb_connection_has_error(display)) {
 		fprintf (stderr, "Unable to open display\n");
-			
+		
 		exit (1);
 	}
 	setup = xcb_get_setup ( display );
@@ -179,10 +179,10 @@ void getTopLevel(int ** toplevel, int * numTopLevel)
 	
 	child = xcb_query_tree_children(reply);
 	*numTopLevel = reply->children_len;
-	printf ("Number of toplevel windows: %d\n", *numTopLevel);
+	// printf ("Number of toplevel windows: %d\n", *numTopLevel);
 	*toplevel =  malloc ((*numTopLevel )* sizeof(int));
 	for (i = 0; i < reply->children_len; i++) {
-	
+		
 		xcb_query_tree_cookie_t qtcookie = 
 		xcb_query_tree ( dpy, child[i]);
 		
@@ -214,6 +214,31 @@ void getTopLevel(int ** toplevel, int * numTopLevel)
 		// topgeom[i] = geom;
 	}
 	// return toplevel;
+	
+	
+}
+
+
+void getMouseLocation ( int * windowId,
+	int * x,
+	int * y)
+{
+	if (display == NULL)
+		init_xcb ( );
+	
+	xcb_query_pointer_cookie_t qpcookie;
+	xcb_query_pointer_reply_t * qpreply;
+	
+	qpcookie = xcb_query_pointer ( display, theRoot );
+	qpreply = xcb_query_pointer_reply ( display, qpcookie, NULL);
+	
+	*windowId = qpreply->child;
+	*x = qpreply->win_x;
+	*y = qpreply->win_y;
+	
+	// printf ("%d : (%d, %d)\n", *windowId, *x, *y );
+	// printf ("%d, %d\n", qpreply->root_x, qpreply->root_y);
+	
 	
 	
 }

@@ -20,7 +20,12 @@ int getRoot ( );
 void getTopLevel(int ** toplevelIds,
                		  int * numTopLevel);
 
-
+// Returns the current location of the mouse.
+// windowId: window in which the mouse is located
+// (x, y): absolute location of the mouse
+void getMouseLocation ( int * windowId,
+				      int * x,
+				      int * y);
 
 
 
