@@ -33,6 +33,11 @@ int theRoot;
 void init_xcb ( ) {
 	
 	display = xcb_connect ( NULL, &screen_number);
+	if (xcb_connection_has_error(display)) {
+		fprintf (stderr, "Unable to open display\n");
+			
+		exit (1);
+	}
 	setup = xcb_get_setup ( display );
 	screen_iter = xcb_setup_roots_iterator(setup);
 	
@@ -95,7 +100,7 @@ int getAncestorBelowRoot ( int wid ) {
 	
 }
 
-void printWindow (int wid ) {
+void printWindowInfo (int wid ) {
 	
 	xcb_get_geometry_cookie_t  geomCookie = 
 	xcb_get_geometry (display, wid);  
@@ -129,7 +134,7 @@ void printTree ( int wid ) {
 			printf ("Level %d --> ", temp->level);
 		}
 		
-		printWindow (temp->wid);
+		printWindowInfo (temp->wid);
 		pushChildren ( temp->wid, temp->level + 1, queue );
 	}
 	printf ("\n");
@@ -148,5 +153,69 @@ int getRoot ( ) {
 }
 
 
+void getTopLevel(int ** toplevel, int * numTopLevel)
+{
+	if (display == NULL)
+		init_xcb ( );
+	
+	int i;
+	xcb_window_t *child;
+	xcb_query_tree_reply_t *reply;
+	xcb_query_tree_cookie_t qtcookie;
+	xcb_connection_t * dpy;
+	xcb_setup_t * setup;
+	char *displayname = NULL;
+	
+	
+	
+	dpy = display;
+	xcb_connect(displayname, &screen_number);
+	
+	
+	qtcookie = xcb_query_tree (dpy, theRoot );
+	reply = xcb_query_tree_reply(dpy, qtcookie, NULL);
+	// if (!reply)
+	// goto done;
+	
+	child = xcb_query_tree_children(reply);
+	*numTopLevel = reply->children_len;
+	printf ("Number of toplevel windows: %d\n", *numTopLevel);
+	*toplevel =  malloc ((*numTopLevel )* sizeof(int));
+	for (i = 0; i < reply->children_len; i++) {
+	
+		xcb_query_tree_cookie_t qtcookie = 
+		xcb_query_tree ( dpy, child[i]);
+		
+		xcb_query_tree_reply_t * qtreply =
+		xcb_query_tree_reply ( dpy, qtcookie, NULL);
+		
+		if (!qtreply)
+		{
+			printf ("GB: Error, unable to query tree for a child %d\n",
+				child[i]);
+			exit ( 0 );
+		}
+		
+		/*
+		xcb_get_geometry_cookie_t  geomCookie = 
+		xcb_get_geometry (dpy, child[i]);  
+		
+		xcb_get_geometry_reply_t  *geom = 
+		xcb_get_geometry_reply (dpy, geomCookie, NULL);
+		
+		
+		// printf ("%d->%d, nc= %d : %dx%d\n", child[i], qtreply->parent, 
+		//	qtreply->children_len, geom->width, geom->height);
+		
+		free (geom);
+		*/
+		(*toplevel)[i] = child[i];
+		
+		// topgeom[i] = geom;
+	}
+	// return toplevel;
+	
+	
+}
 
 

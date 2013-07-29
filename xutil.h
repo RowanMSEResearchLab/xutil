@@ -12,9 +12,13 @@ int getAncestorBelowRoot ( int windowId ) ;
 // (x, y) location and width X height
 void printTree ( int windowId );
 
+void printWindowInfo ( int windowId );
+
 // Returns the root window
 int getRoot ( );
 
+void getTopLevel(int ** toplevelIds,
+               		  int * numTopLevel);
 
 
 
