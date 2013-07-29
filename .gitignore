@@ -15,3 +15,7 @@
 *.exe
 *.out
 *.app
+
+#editor files
+*.c~
+*.h~
