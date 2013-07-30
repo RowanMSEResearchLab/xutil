@@ -169,7 +169,6 @@ void getTopLevel(int ** toplevel, int * numTopLevel)
 	
 	
 	dpy = display;
-	xcb_connect(displayname, &screen_number);
 	
 	
 	qtcookie = xcb_query_tree (dpy, theRoot );
