@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <X11/cursorfont.h>
 
 struct _entry {
 	int wid;
@@ -195,19 +196,7 @@ void getTopLevel(int ** toplevel, int * numTopLevel)
 			exit ( 0 );
 		}
 		
-		/*
-		xcb_get_geometry_cookie_t  geomCookie = 
-		xcb_get_geometry (dpy, child[i]);  
 		
-		xcb_get_geometry_reply_t  *geom = 
-		xcb_get_geometry_reply (dpy, geomCookie, NULL);
-		
-		
-		// printf ("%d->%d, nc= %d : %dx%d\n", child[i], qtreply->parent, 
-		//	qtreply->children_len, geom->width, geom->height);
-		
-		free (geom);
-		*/
 		(*toplevel)[i] = child[i];
 		
 		// topgeom[i] = geom;
@@ -242,4 +231,94 @@ void getMouseLocation ( int * windowId,
 	
 }
 
+void getLocGeom ( int windowId,
+	int *x,
+	int *y,
+	int *width,
+	int *height )
+{
+	
+	if (display == NULL)
+		init_xcb();
+	xcb_get_geometry_cookie_t  geomCookie = 
+	xcb_get_geometry (display, windowId);  
+	
+	xcb_get_geometry_reply_t  *geom = 
+	xcb_get_geometry_reply (display, geomCookie, NULL);
+	
+	
+	// printf ("%d->%d, nc= %d : %dx%d\n", child[i], qtreply->parent, 
+	//	qtreply->children_len, geom->width, geom->height);
+	
+	*x = geom->x;
+	*y = geom->y;
+	*width = geom->width;
+	*height = geom->height;
+	
+	free (geom);
+	
+	
+	
+}
 
+
+xcb_cursor_t
+Create_Font_Cursor (xcb_connection_t *dpy, uint16_t glyph)
+{
+	static xcb_font_t cursor_font;
+	xcb_cursor_t cursor;
+	
+	if (!cursor_font) {
+		cursor_font = xcb_generate_id (dpy);
+		xcb_open_font (dpy, cursor_font, strlen ("cursor"), "cursor");
+	}
+	
+	cursor = xcb_generate_id (dpy);
+	xcb_create_glyph_cursor (dpy, cursor, cursor_font, cursor_font,
+		glyph, glyph + 1,
+		0, 0, 0, 0xffff, 0xffff, 0xffff);  /* rgb, rgb */
+	
+	return cursor;
+}
+
+void Fatal_Error ( char * message ) {
+	printf ("%s\n", message);
+	exit ( 0 );
+}
+
+void grabMouse ( ) {
+	
+	if (display == NULL)
+		init_xcb ( );
+	xcb_cursor_t cursor;
+	cursor = Create_Font_Cursor (display, XC_crosshair);
+	xcb_grab_pointer_cookie_t gpcookie;
+	
+	gpcookie = xcb_grab_pointer(
+		display,
+		0,
+		theRoot,       
+		XCB_EVENT_MASK_BUTTON_PRESS | 
+		XCB_EVENT_MASK_BUTTON_RELEASE,
+		XCB_GRAB_MODE_ASYNC, 
+		XCB_GRAB_MODE_ASYNC,
+		theRoot, 
+		cursor, 
+		XCB_TIME_CURRENT_TIME);
+	
+	xcb_grab_pointer_reply_t * gpreply;
+	xcb_generic_error_t *err;
+	
+	gpreply = xcb_grab_pointer_reply (display, gpcookie, &err);
+	if (gpreply->status != XCB_GRAB_STATUS_SUCCESS)
+		Fatal_Error ("Can't grab the mouse.");
+}
+
+/*
+void moveMouse (int x, int y) {
+	
+	
+	
+}
+
+*/

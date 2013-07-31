@@ -27,6 +27,20 @@ void getMouseLocation ( int * windowId,
 				      int * x,
 				      int * y);
 
+// Gets the (x,y) location and width/height of the specified window
+void getLocGeom ( int windowId,
+			      int *x,
+			      int *y,
+			      int *width,
+			      int *height );
+
+// Grabs the mouse and configures it 
+// to report button press and button release 
+// events
+void grabMouse ( );
+
+
+// void moveMouse ( int x, int y );
 
 
 #endif
