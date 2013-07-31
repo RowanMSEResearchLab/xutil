@@ -15,6 +15,10 @@
 *.exe
 *.out
 *.app
+toplevel
+windowtree
+mouseloc
+mousegrab
 
 #editor files
 *.c~

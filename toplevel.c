@@ -10,6 +10,7 @@ void main (int argc, char *argv[])
 	int * topw;
 	int numWin;
 	
+	initialize ( );
 	getTopLevel (&topw, &numWin );
 	for (i = 0; i < numWin; i++) {
 		printWindowInfo (topw[i]);

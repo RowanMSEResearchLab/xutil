@@ -10,6 +10,7 @@ void main ( int argc, char *argv[] ) {
 	
 	int windowId, lx, ly;
 	
+	initialize ( );
 	grabMouse( ); // Initiate an active mouse grab
 
 	xcb_generic_event_t * event;

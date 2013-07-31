@@ -4,6 +4,8 @@
 void main ( int argc, char *argv[] ) {
 
 	int windowId, x, y;
+
+	initialize ( );
 	
 	while (1) {
 	

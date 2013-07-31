@@ -3,6 +3,11 @@
 #define _XUTIL_H
 
 
+
+// Initialize. Should be called at the 
+// beginning of any program using xutil
+void initialize ( );
+
 // Returns the top level window that is the 
 // ancestor of windowId.
 int getAncestorBelowRoot ( int windowId ) ;

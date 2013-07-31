@@ -19,7 +19,7 @@ void main ( int argc, char *argv[] ) {
 	top = 0;
 	topwid = -1;
 	
-	init_xcb( );
+	initialize ( );
 	for (i = 1; i < argc; i++) {
 		if (strcmp (argv[i], "-top") == 0)
 			top = 1;

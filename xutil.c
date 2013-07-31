@@ -15,6 +15,12 @@ struct _entry {
 
 typedef struct _entry * entry;
 
+xcb_connection_t * display = (xcb_connection_t *) NULL;
+int screen_number = 0;
+xcb_setup_t *setup;
+xcb_screen_iterator_t screen_iter;
+int theRoot;
+
 entry create ( int wid, int level ) {
 	entry e;
 	e = (entry) malloc(sizeof(struct _entry));
@@ -24,12 +30,6 @@ entry create ( int wid, int level ) {
 	return e;
 }
 
-
-xcb_connection_t * display = (xcb_connection_t *) NULL;
-int screen_number = 0;
-xcb_setup_t *setup;
-xcb_screen_iterator_t screen_iter;
-int theRoot;
 
 void init_xcb ( ) {
 	
@@ -48,6 +48,9 @@ void init_xcb ( ) {
 	theRoot = screen_iter.data->root;
 }
 
+void initialize ( ) {
+	init_xcb ( );
+}
 
 
 void pushChildren ( int wid, int level, GQueue * queue ) {
