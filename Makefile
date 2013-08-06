@@ -1,5 +1,5 @@
 CC = gcc
-PKGS = xcb glib-2.0
+PKGS = xcb glib-2.0 xcb-xtest
 CFLAGS = -g `pkg-config --cflags $(PKGS)`
 LDFLAGS = `pkg-config --libs $(PKGS)`
 
