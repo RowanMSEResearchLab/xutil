@@ -16,7 +16,7 @@ static void fake_input(xcb_connection_t *c, uint8_t type, uint8_t detail, int x,
 }
 
 void mouse_click( xcb_connection_t *c, int button, int x, int y ) {
-  dmsg( 1, "Clicking mouse button %d\n", button );
+  //dmsg( 1, "Clicking mouse button %d\n", button );
   fake_input( c, XCB_BUTTON_PRESS, button, x, y );
   fake_input( c, XCB_BUTTON_RELEASE, button, x, y );
 }
@@ -58,13 +58,15 @@ void main (int argc, char *argv[])
 
 	while (1)
 	{
-		printf("Please enter the x coord for the click.");
-		int x = getchar();
-		printf("Please enter the y coord for the click.");
-		int y = getchar();
-		printf("Coordinates received. Clicking @ %d, %d", x, y);
+		int x;
+		int y;
+		printf("Please enter the x coord for the click.\n");
+		scanf("%d", &x);
+		printf("Please enter the y coord for the click.\n");
+		scanf("%d", &y);
+		printf("Coordinates received. Clicking @ %d, %d\n", x, y);
 		//execute click buddy
 		//fake_input(c, XCB_BUTTON_PRESS, DETAIL, 0, none, x, y, 0);
-		mouse_click(c, 1, x, y);
+		mouse_click(c, 0, x, y);
 	}
 }
